@@ -23,6 +23,34 @@ if (envConfig.url) {
   });
 }
 
+// define Track model on the sequelize instance so it can be reused elsewhere
+const { DataTypes } = require('sequelize');
+const Track = sequelize.define('Track', {
+  trackId: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  songTitle: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  artistName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  albumName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  genre: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  duration: DataTypes.INTEGER, // seconds
+  releaseYear: DataTypes.INTEGER,
+});
+
 // when run directly (`node database/setup.js`), try authenticating and
 // report the status.  this also ensures the SQLite file is created.
 if (require.main === module) {
@@ -37,4 +65,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = sequelize;
+module.exports = { sequelize, Track };

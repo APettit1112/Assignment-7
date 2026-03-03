@@ -1,16 +1,6 @@
-// Import database and model
-const sequelize = require('./setup');
-const { DataTypes } = require('sequelize');
+// Import database connection and Track model
+const { sequelize, Track } = require('./setup');
 
-// define a simple Track model for seeding
-const Track = sequelize.define('Track', {
-  songTitle: { type: DataTypes.STRING, allowNull: false },
-  artistName: { type: DataTypes.STRING, allowNull: false },
-  albumName: DataTypes.STRING,
-  genre: DataTypes.STRING,
-  duration: DataTypes.INTEGER,
-  releaseYear: DataTypes.INTEGER
-});
 
 // Seed data
 const sampleTracks = [
