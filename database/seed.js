@@ -1,4 +1,16 @@
 // Import database and model
+const sequelize = require('./setup');
+const { DataTypes } = require('sequelize');
+
+// define a simple Track model for seeding
+const Track = sequelize.define('Track', {
+  songTitle: { type: DataTypes.STRING, allowNull: false },
+  artistName: { type: DataTypes.STRING, allowNull: false },
+  albumName: DataTypes.STRING,
+  genre: DataTypes.STRING,
+  duration: DataTypes.INTEGER,
+  releaseYear: DataTypes.INTEGER
+});
 
 // Seed data
 const sampleTracks = [
@@ -101,3 +113,18 @@ const sampleTracks = [
 ];
 
 // Seed database with sample data
+
+async function seed() {
+  await sequelize.sync({ force: true });
+  await Track.bulkCreate(sampleTracks);
+  console.log('Database seeded');
+}
+
+// execute if script is run directly
+if (require.main === module) {
+  seed().catch(err => {
+    console.error('Seeding failed', err);
+    process.exit(1);
+  });
+}
+

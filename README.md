@@ -10,12 +10,33 @@ A RESTful API for managing a music library built with Node.js, Express.js, and S
    npm install
    ```
 
-3. Create environment file:
+3. Create environment file (see `.env` for default values):
    ```bash
    cp .env.example .env
    ```
 
-4. Set up the database:
+   The `.env` file holds variables used by Sequelize to connect to the
+   database. The project supports separate settings for development and
+   production; by default `NODE_ENV` is `development` but you can change it
+   either in the `.env` file or by exporting the variable in your shell.
+   Example entries include:
+
+   ```ini
+   NODE_ENV=development
+   DEV_DB_DIALECT=sqlite
+   DEV_DB_STORAGE=./database/dev.sqlite
+   DEV_DATABASE_URL=sqlite:./database/dev.sqlite
+
+   # production overrides (set NODE_ENV=production in a deployed env)
+   PROD_DB_DIALECT=sqlite
+   PROD_DB_STORAGE=./database/prod.sqlite
+   PROD_DATABASE_URL=sqlite:./database/prod.sqlite
+   ```
+
+   See `database/config.js` and `database/setup.js` for how the values are
+   consumed.
+
+4. Set up the database (this will create `database/music_library.db` based on your `.env` configuration):
    ```bash
    node database/setup.js
    ```
