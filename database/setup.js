@@ -51,18 +51,27 @@ const Track = sequelize.define('Track', {
   releaseYear: DataTypes.INTEGER,
 });
 
-// when run directly (`node database/setup.js`), try authenticating and
-// report the status.  this also ensures the SQLite file is created.
+// when run directly (`node database/setup.js`), perform a full
+// initialization sequence: authenticate, sync (creating tables), then close.
+// this ensures the file exists and the schema is in place without leaving
+// an open connection.
 if (require.main === module) {
-  sequelize
-    .authenticate()
-    .then(() => {
+  (async () => {
+    try {
+      await sequelize.authenticate();
       console.log('Connection established to database:', envConfig.storage || envConfig.url);
-    })
-    .catch(err => {
-      console.error('Unable to connect to database:', err);
+
+      // sync will create tables based on defined models
+      await sequelize.sync();
+      console.log('Database synchronized (tables created if needed)');
+    } catch (err) {
+      console.error('Database initialization failed:', err);
       process.exit(1);
-    });
+    } finally {
+      await sequelize.close();
+      console.log('Connection closed');
+    }
+  })();
 }
 
 module.exports = { sequelize, Track };
